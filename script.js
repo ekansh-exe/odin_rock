@@ -1,57 +1,69 @@
-function getcomputerchoice(){
+function getcomputerchoice() {
     const a = Math.random();
-    if(a<0.333) {return 'rock';}
-    else if(a>=0.333 && a<0.666) {return 'paper';}
-    else{return 'scissors';}
+    if (a < 0.333) return 'rock';
+    else if (a < 0.666) return 'paper';
+    else return 'scissors';
 }
 
-function gethumanchoice(){
-    let choice = prompt("Rock, paper, or scissors");
-    return choice.toLowerCase();
-}
 let humanScore = 0;
 let computerScore = 0;
-function playGame(){
 
-function playround(humanChoice,computerChoice){
-    if(humanChoice =="rock" && computerChoice == 'paper'){computerScore++; return "Lose";}
-    else if(humanChoice =="rock" && computerChoice == 'rock'){return "Tie";}
-    else if(humanChoice =="rock" && computerChoice == 'scissors'){humanScore++ ;return "Win";}
-    else if(humanChoice =="paper" && computerChoice == 'paper'){return "Tie";}
-    else if(humanChoice =="paper" && computerChoice == 'rock'){humanScore++;return "Win";}
-    else if(humanChoice =="paper" && computerChoice == 'scissors'){ computerScore++ ;return "Lose";}
-    else if(humanChoice =="scissors" && computerChoice == 'paper'){humanScore++;return "Win";}
-    else if(humanChoice =="scissors" && computerChoice == 'rock'){ computerScore++ ;return "Lose";}
-    else if(humanChoice =="scissors" && computerChoice == 'scissors'){return "Tie";}
-    
-}
-const humanChoice = gethumanchoice();
-const computerChoice = getcomputerchoice();
+function playRound(humanChoice) {
+    const computerChoice = getcomputerchoice();
+    let result = "";
 
-const result = playround(humanChoice, computerChoice);
-console.log(`Round result: ${result}. You chose ${humanChoice}, Computer chose ${computerChoice}`);
-
-}
-
-
-for(let i=0;i<5;i++){
-    playGame();
+    if (humanChoice === "rock") {
+        if (computerChoice === "paper") {
+            computerScore++;
+            result = "You Lose! Paper beats Rock.";
+        } else if (computerChoice === "scissors") {
+            humanScore++;
+            result = "You Win! Rock beats Scissors.";
+        } else {
+            result = "It's a Tie!";
+        }
+    } else if (humanChoice === "paper") {
+        if (computerChoice === "scissors") {
+            computerScore++;
+            result = "You Lose! Scissors beats Paper.";
+        } else if (computerChoice === "rock") {
+            humanScore++;
+            result = "You Win! Paper beats Rock.";
+        } else {
+            result = "It's a Tie!";
+        }
+    } else if (humanChoice === "scissors") {
+        if (computerChoice === "rock") {
+            computerScore++;
+            result = "You Lose! Rock beats Scissors.";
+        } else if (computerChoice === "paper") {
+            humanScore++;
+            result = "You Win! Scissors beats Paper.";
+        } else {
+            result = "It's a Tie!";
+        }
     }
-if (humanScore>computerScore) {
-        console.log("you win. Congrats");
-    }
-    else if (humanScore<computerScore) {
-        console.log("you lose. Better Luck Next Time")
-    } else {
-        console.log('its a tie. Play again');
-    }
 
-let finalMessage = `Final Score:\nYou: ${humanScore} - Computer: ${computerScore}\n`;
-if (humanScore > computerScore) {
-    finalMessage += "You win. Congrats!";
-} else if (humanScore < computerScore) {
-    finalMessage += "You lose. Better Luck Next Time.";
-} else {
-    finalMessage += "It's a tie. Play again!";
+    document.getElementById("result").textContent = `${result} (You: ${humanChoice}, Computer: ${computerChoice})`;
+    document.getElementById("score").textContent = `Score: You ${humanScore} - ${computerScore} Computer`;
+
+    checkWinner();
 }
-alert(finalMessage); 
+
+function checkWinner() {
+    if (humanScore === 5 || computerScore === 5) {
+        let finalMessage = humanScore === 5 ? "You win the game!" : "Computer wins the game!";
+        alert(finalMessage);
+
+        // Reset game
+        humanScore = 0;
+        computerScore = 0;
+        document.getElementById("score").textContent = `Score: You 0 - 0 Computer`;
+        document.getElementById("result").textContent = "New game started!";
+    }
+}
+
+// Attach event listeners to buttons
+document.getElementById("rock").addEventListener("click", () => playRound("rock"));
+document.getElementById("paper").addEventListener("click", () => playRound("paper"));
+document.getElementById("scissors").addEventListener("click", () => playRound("scissors"));
